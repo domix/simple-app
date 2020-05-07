@@ -62,5 +62,24 @@ tasks.withType(JavaExec) {
 }
 
 
-jib.to.image = 'domix/simple-app'
+//jib.to.image = 'domix/simple-app'
 
+jib {
+    from {
+        image = "${ javaOciImage }"
+    }
+    to {
+        image = "${ repo }:${ version.toString().toLowerCase() }"
+        tags = ['latest']
+    }
+    container {
+        jvmFlags = [
+                "-Dcom.sun.management.jmxremote",
+                "-Xmx128m",
+                '-Xdebug',
+                '--enable-preview'
+        ]
+        labels = [maintainer: "Domingo Suarez Torres <domingo.suarez@gmail.com>"]
+        format = 'OCI'
+    }
+}
