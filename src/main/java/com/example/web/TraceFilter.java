@@ -20,11 +20,12 @@ public class TraceFilter implements HttpServerFilter {
 
   @Override
   public Publisher<MutableHttpResponse<?>> doFilter(HttpRequest<?> request, ServerFilterChain chain) {
-    return traceService.trace(request)
+    return traceService
+      .trace(request)
       .switchMap(aBoolean -> chain.proceed(request))
       .doOnNext(
         res ->
-          res.getHeaders().add("X-Service-Name", serviceName)
+          res.getHeaders().add("x-service-name", serviceName)
       );
   }
 }
